@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace="pakage + interface" -->
+<mapper namespace="com.yun.board.mapper.BoardMapper">
+
+	<select id="list" resultType="com.yun.board.vo.BoardVO">
+
+		select* from board WHERE NO BETWEEN #{start} AND #{end}
+
+	</select>
+
+	<select id="countBoard" resultType="int">
+		SELECT COUNT(*) FROM BOARD
+	</select>
+
+
+	<select id="view" resultType="com.yun.board.vo.BoardVO">
+		select * from board where no =#{no}
+
+	</select>
+	
+	<select id="getComment" resultType="com.yun.board.vo.CommentVO">
+		select * from comment where no =#{no}
+
+	</select>
+
+	<select id="insert" parameterType="String">
+		INSERT INTO board (title, content, writer) VALUES (#{title}, #{content},
+		#{writer})
+	</select>
+
+	<update id="update" parameterType="String">
+		update board set title = #{title}, content=#{content} where no = #{num} 
+	</update>
+	
+	<insert id="writeCo" parameterType="String">
+	INSERT INTO comment (no ,writer,comment) values (#{no},#{writer},#{comments} )
+	
+	
+	</insert>
+
+
+
+
+
+	<sql id="search">
+		<!-- mybatis에서는 데이터 자동변환을 한다. 글자가 한자이면 char -->
+		<if test="word != null and word != ''.toString()">
+			<!-- 검색하는 데이터가 있는 경우 where가 나온다. -->
+			where 1 = 0
+			<if test="key == 't'.toString()">
+				OR title like '%' || #{word} || '%'
+			</if>
+
+			<if test="key == 'c'.toString()">
+				OR content like '%' || #{word} || '%'
+			</if>
+
+			<if test="key == 'w'.toString()">
+				OR writer like '%' || #{word} || '%'
+			</if>
+
+			<if test="key == 'tc'">
+				OR title like '%' || #{word} || '%'
+				OR content like '%' ||
+				#{word} || '%'
+			</if>
+
+			<if test="key == 'tw'">
+				OR title like '%' || #{word} || '%'
+				OR writer like '%' ||
+				#{word} || '%'
+			</if>
+
+			<if test="key == 'cw'">
+				OR content like '%' || #{word} || '%'
+				OR writer like '%'
+				|| #{word} || '%'
+			</if>
+
+			<if test="key == 'tcw'">
+				OR title like '%' || #{word} || '%'
+				OR content like '%' ||
+				#{word} || '%'
+				OR writer like '%' || #{word} || '%'
+			</if>
+
+		</if>
+	</sql>
+
+
+</mapper>

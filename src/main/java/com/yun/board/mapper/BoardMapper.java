@@ -7,6 +7,7 @@ import java.util.Map;
 import com.yun.board.vo.BoardVO;
 import com.yun.board.vo.CommentVO;
 import com.yun.board.vo.PagingVO;
+import com.yun.board.vo.ReCommentVO;
 
 import net.webjjang.util.PageObject;
 
@@ -27,6 +28,12 @@ public interface BoardMapper {
 	public void writeCo(Map<String, Object> param);
 	
 	public List<CommentVO> getComment(Map<String, Object> param);
+	
+	public void reWriteCo(Map<String, Object> param);
+	
+	public void commentCount(Map<String, Object> param);
+	
+	public List<ReCommentVO> getReComment(Map<String, Object> param);
 	
 	
 

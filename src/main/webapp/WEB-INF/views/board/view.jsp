@@ -24,14 +24,14 @@
 	<section class="gofish">
 		<nav>
 			<ul class="nav-bar">
-				<li >게시글</li>
-				<li class="no" value="${vo.no}">${vo.no} </li>
+				<li>게시글</li>
+				<li class="no" value="${vo.no}">${vo.no}</li>
 			</ul>
 		</nav>
 
 		<table class="hero">
 			<tr class="context">
-				<td >제목:${vo.title }</td>
+				<td>제목:${vo.title }</td>
 			</tr>
 		</table>
 		<div class="som">
@@ -47,22 +47,21 @@
 			</div>
 
 		</div>
-		</section>
-		
-	
+	</section>
+
+
 	<footer>
 		<div class="commentBox">
-		<input type="text" id="commentWr" value="글쓴이">
-		<input type="text" id="commentLine" class="comment">
+			<input type="text" id="commentWr" value="글쓴이"> <input
+				type="text" id="commentLine" class="comment">
 		</div>
 		<div class="button3" id="commentGo" onclick="commentGo()">댓글달기</div>
-		
-		<div class ="commenthere">
-		<div class="commentList">
-		
-		ss
+
+		<div class="commenthere">
+			<div class="commentList"></div>
 		</div>
-		</div>
+		<div class="reCommentBox"></div>
+
 	</footer>
 	<style>
 body {
@@ -75,33 +74,39 @@ body {
 
 .comment {
 	width: 302px;
-    height: 43px;
-    margin: 0 12px 27px 0px;
-    border: 0.2px solid darkgray;
+	height: 43px;
+	margin: 0 12px 27px 0px;
+	border: 0.2px solid darkgray;
 }
 
-.commentBox{
-	display:flex;
-	flex-direction: column;
-	}
+.rere {
+	width: 302px;
+	height: 43px;
+	border: 0.2px solid darkgray;
+}
 
-.commentList{
+.commentBox {
+	display: flex;
+	flex-direction: column;
+}
+
+.commentList {
 	border: 1px solid black;
-    display: flex;
-    width: 300px;
-    height: 40px;
+	display: flex;
+	width: 300px;
+	height: 40px;
 }
 
 .button3 {
 	border: 0;
-    height: 10px;
-    margin: -17px 0 20px 3px;
-    padding: 8px 12px;
-    font-size: 10px;
-    background-color: #828282;
-    width: 41px;
-    border-radius: 18px;
-    color: #ffffff;
+	height: 10px;
+	margin: -17px 0 20px 3px;
+	padding: 8px 12px;
+	font-size: 10px;
+	background-color: #828282;
+	width: 41px;
+	border-radius: 18px;
+	color: #ffffff;
 	/* text-transform: uppercase; */
 	/* text-align: center; */
 }
@@ -305,12 +310,12 @@ form {
 }
 
 footer {
-	    font-family: Arial, Helvetica, sans-serif;
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-    /* justify-content: flex-end; */
-    margin: 0 auto;
+	font-family: Arial, Helvetica, sans-serif;
+	display: flex;
+	flex-direction: column;
+	width: 300px;
+	/* justify-content: flex-end; */
+	margin: 0 auto;
 }
 
 .far {
@@ -333,81 +338,159 @@ a:active {
 </style>
 </body>
 <script type="text/javascript">
-
 	commentGet();
-	
-	function commentGet(){
+
+	function commentGet() {
 		console.log("댓글가져옵니다")
-		var datas= new Object();
-		datas.no= $(".no").val();
+		var datas = new Object();
+		datas.no = $(".no").val();
 		console.log(datas);
-		
+
 		var getComment = JSON.stringify(datas);
 		var dataComment;
 		$.ajax({
-			type:"GET",
-			url: "getComment.do",
-			dataType:'json',
-			async: false,
+			type : "GET",
+			url : "getComment.do",
+			dataType : 'json',
+			async : false,
 			data : datas,
-			success : function(data){
+			success : function(data) {
 				dataComment = $(data);
-				console.log(dataComment[0].writer+" check");
-				console.log(dataComment[1].writer+" check");
-			}    
-			,error : function onError(error){
+				console.log(dataComment[0].writer + " check");
+				console.log(dataComment[1].writer + " check");
+				console.log(dataComment[0].count + "카운트첵")
+			},
+			error : function onError(error) {
 				console.log("error");
 			}
 		});
-		
+		//대댓글 찾아올 아이만 찾기
+		console.log("대댓글 가져옵니다");
+		//var dataReco= [];
+		//for(var i=0; i<dataComment.length ; i++){
+		//	if(dataComment[i].count>0){
+		//		console.log(dataComment[i].cid)
+		//		dataReco[i]=dataComment[i].cid
+		//	}
+		//}
+		//console.log("대댓글 있는사람?");
+		//console.log(dataReco)
+		//ajax이용해서 대댓글 가져오기
+		var reCoList;
+		$.ajax({
+			type : "GET",
+			url : "getReComment.do",
+			dataType : 'json',
+			async : false,
+			data : datas,
+			success : function(data) {
+				reCoList = $(data);
+				console.log("조회해봤음");
+				console.log(reCoList);
+			}
+		});
+
 		console.log(dataComment)
-		
+
 		var commentBox = $(".commenthere");
-		var stmt ="";
-		for( var i=0; i<dataComment.length ; i++){
-			stmt+="<div class='commentList'>"
-			stmt+= "<p> "+ dataComment[i].writer+" </p>";
-			stmt+="<p>"+ dataComment[i].comment+" </p>";
-			stmt+="</div>"
+		var stmt = "";
+		if (!dataComment) {
+			console.log("댓글이없어용");
+		} else {
+			for (var i = 0; i < dataComment.length; i++) {
+				var cid = dataComment[i].cid;
+				stmt += "<div class='commentList"+cid+"' >"
+				stmt += "<p id='reCoNo"+cid+"'>" + dataComment[i].cid + " </p>";
+				stmt += "<p id='cowriter"+cid+"'>" + dataComment[i].writer
+						+ " </p>";
+				stmt += "<p id='cocontent"+cid+"'>" + dataComment[i].comment
+						+ " </p>";
+				stmt += "<div class='button3' id='commentGo' onclick='reCommentGo("
+						+ cid + ")''>댓글달기</div>"
+				stmt += "</div>"
+				if (dataComment[i].count > 0) {
+					for (var j = 0; j < dataComment[i].count; j++) {
+						if (reCoList[j].cid == cid) {
+							stmt += "<p class='rere'>대댓글 입니다"
+									+ reCoList[j].writer + "/"
+									+ reCoList[j].comment + " </p>";
+
+							console.log("확인용")
+						}
+					}//for j
+				} else {
+					console.log("대댓글이 없네요")
+				}//if
+			}//
+			console.log("checkin" + stmt);
+			commentBox.html(stmt);
 		}
-		console.log("checkin"+stmt);
-		commentBox.html(stmt);
-		
-		
-		
 	}
-	
-	
-	function commentGo(){
+
+	//대댓글 박스 생성 스크립트 
+	function reCommentGo(i) {
+
+		var reCo = $(".commentList" + i);
+		var commentbox = "";
+		commentbox += "<div class='commentBox'>";
+		commentbox += "<input type='text' id='recommentWr"+i+"' value='글쓴이'>";
+		commentbox += "<input type='text' id='recommentLine"+i+"' class='comment'></div>";
+		commentbox += "<div class='button3' id='commentGo' onclick='rocoreco("
+				+ i + ")'>대댓글</div>";
+		reCo.after(commentbox);
+		console.log(commentbox);
+
+	}
+
+	//대댓글 전송해주는 ajax
+	function rocoreco(i) {
+
+		console.log("고유번호를 가지고오느라" + i);
+		var recomment = new Object();
+		//대댓글글쓴이
+		recomment.writer = $("#recommentWr" + i).val();
+		//대댓글의 댓글고유번호
+		recomment.cid = i;
+		//대닷글 내용
+		recomment.comments = $("#recommentLine" + i).val();
+		//대댓글의 댓글 게시글번호
+		recomment.no = $(".no").val();
+
+		console.log(recomment);
+
+		$.ajax({
+			type : "post",
+			url : "reWriteCo.do",
+			dataType : 'json',
+			data : recomment,
+			success : function(data) {
+				console.log("대댓글 성공~!")
+			}
+		});
+
+	}
+
+	function commentGo() {
 		var datas = new Object();
 		datas.no = $(".no").val();
 		datas.writer = $("#commentWr").val();
 		datas.comments = $("#commentLine").val();
 		console.log(datas);
-		
 		var jsonData = JSON.stringify(datas);
-		
+
 		$.ajax({
-			type:"post",
-			url: "writeCo.do",
-			dataType:'json',
+			type : "post",
+			url : "writeCo.do",
+			dataType : 'json',
 			data : datas,
-			success : function(data){
+			success : function(data) {
 				console.log("성공");
-			}    
-			
-			
-			
+			}
 		});
 		commentGet();
-		
+
 	}
-	
-	
-	
 
-
-	
 	var html1 = "";
 	var html2 = "";
 	var buttonedit = "";

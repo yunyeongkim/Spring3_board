@@ -27,6 +27,7 @@ import com.yun.board.mapper.BoardMapper;
 import com.yun.board.service.BoardService;
 import com.yun.board.vo.CommentVO;
 import com.yun.board.vo.PagingVO;
+import com.yun.board.vo.ReCommentVO;
 
 import net.webjjang.util.PageObject;
 
@@ -52,11 +53,23 @@ public class BoardController {
 	}
 	
 	@GetMapping("/getComment.do")
-	
 	public @ResponseBody List<CommentVO> getComment(@RequestParam Map<String,Object> param,Model model,HttpServletRequest request) {
 		
 		List<CommentVO> result = new ArrayList<CommentVO>(); 
 		result = service.getComment(param);
+		
+		System.out.println(result.get(0));
+		model.addAttribute("comment", service.getComment(param));
+		System.out.println(model);
+	
+		return result;
+	
+	}
+	@GetMapping("/getReComment.do")
+	public @ResponseBody List<ReCommentVO> getReComment(@RequestParam Map<String,Object> param,Model model,HttpServletRequest request) {
+		
+		List<ReCommentVO> result = new ArrayList<ReCommentVO>(); 
+		result = service.getReComment(param);
 		
 		System.out.println(result.get(0));
 		model.addAttribute("comment", service.getComment(param));
@@ -96,6 +109,14 @@ public class BoardController {
 		System.out.println("ÄÚ¸àÆ® ³Ö¾î¿ä~");
 		service.writeCo(param);
 	}
+	
+	@GetMapping("/reWriteCo.do")
+	public void reWriteCo(@RequestParam Map<String,Object> param) {
+		System.out.println("´ë´ñ±Û~ÄÚ¸àÆ® ³Ö¾î¿ä~");
+		service.reWriteCo(param);
+	}
+	
+	
 	
 	
 	

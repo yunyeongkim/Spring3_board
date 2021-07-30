@@ -1,19 +1,20 @@
 package com.yun.board.vo;
 
-public class CommentVO {
+public class ReCommentVO {
 	
 	int no,cid,count;
+	String writer,comment;
 	/**
-	 * @return the count
+	 * @return the no
 	 */
-	public int getCount() {
-		return count;
+	public int getNo() {
+		return no;
 	}
 	/**
-	 * @param count the count to set
+	 * @param no the no to set
 	 */
-	public void setCount(int count) {
-		this.count = count;
+	public void setNo(int no) {
+		this.no = no;
 	}
 	/**
 	 * @return the cid
@@ -27,18 +28,17 @@ public class CommentVO {
 	public void setCid(int cid) {
 		this.cid = cid;
 	}
-	String writer,comment;
 	/**
-	 * @return the no
+	 * @return the count
 	 */
-	public int getNo() {
-		return no;
+	public int getCount() {
+		return count;
 	}
 	/**
-	 * @param no the no to set
+	 * @param count the count to set
 	 */
-	public void setNo(int no) {
-		this.no = no;
+	public void setCount(int count) {
+		this.count = count;
 	}
 	/**
 	 * @return the writer
@@ -66,7 +66,7 @@ public class CommentVO {
 	}
 	@Override
 	public String toString() {
-		return "CommentVO [no=" + no + ", cid=" + cid + ", count=" + count + ", writer=" + writer + ", comment="
+		return "ReCommentVO [no=" + no + ", cid=" + cid + ", count=" + count + ", writer=" + writer + ", comment="
 				+ comment + "]";
 	}
 

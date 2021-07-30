@@ -29,6 +29,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from comment where no =#{no}
 
 	</select>
+	
+	<select id="getReComment" resultType="com.yun.board.vo.CommentVO">
+		select * from commentc where no =#{no} 
+
+	</select>
 
 	<select id="insert" parameterType="String">
 		INSERT INTO board (title, content, writer) VALUES (#{title}, #{content},
@@ -42,10 +47,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="writeCo" parameterType="String">
 	INSERT INTO comment (no ,writer,comment) values (#{no},#{writer},#{comments} )
 	
-	
 	</insert>
 
-
+	<insert id="reWriteCo" parameterType="String">
+	INSERT INTO commentc (writer,comment,cid,no) values (#{writer},#{comments},#{cid},#{no} )
+	
+	</insert>
+	
+	<update id="commentCount">
+	update comment SET COUNT=count+1 WHERE cid=#{cid}
+	</update>
 
 
 

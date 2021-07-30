@@ -14,11 +14,12 @@ import com.yun.board.mapper.BoardMapper;
 import com.yun.board.vo.BoardVO;
 import com.yun.board.vo.CommentVO;
 import com.yun.board.vo.PagingVO;
+import com.yun.board.vo.ReCommentVO;
 
 import net.webjjang.util.PageObject;
 
 @Service
-public class BoardService {
+public class BoardService { 
 	
 	@Inject
 	private BoardMapper mapper;
@@ -30,6 +31,10 @@ public class BoardService {
 		
 		return mapper.getComment(param);
 		
+	}
+	public List<ReCommentVO> getReComment(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return mapper.getReComment(param);
 	}
 	
 	public List<BoardVO> list(PagingVO pagingVO, @RequestParam(value="nowPage", required=false)String nowPage
@@ -92,6 +97,15 @@ public class BoardService {
 		mapper.writeCo(param);
 		
 	}
+
+	public void reWriteCo(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+	
+		mapper.reWriteCo(param);
+		mapper.commentCount(param);
+	}
+
+	
 
 	
 	
